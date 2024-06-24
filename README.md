@@ -14,5 +14,6 @@ cd Proyek-Analisis-Data_Bike-Sharing
 ```
 pip install streamlit
 pip install -r dashboard/requirements.txt
+cd dashboard
 streamlit run dashboard.py
 ```
