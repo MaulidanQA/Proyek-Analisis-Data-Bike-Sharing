@@ -121,5 +121,5 @@ st.sidebar.download_button(
     help="Click to download the DataFrame as a CSV file."
 )
 
-st.sidebar.caption("<div style='text-align: center; margin-top: 50px;'>Aldi Putra Miftaqull Ullum\nDICODING</div>", unsafe_allow_html=True)
-st.sidebar.markdown("<div style='text-align: center;'><a href='https://github.com/AldiPutra24' target='_blank'>GitHub 🦝</a></div>", unsafe_allow_html=True)
+st.sidebar.caption("<div style='text-align: center; margin-top: 50px;'>Maulidan Qowiyyul Amin\nDICODING</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='text-align: center;'><a href='https://github.com/MaulidanQA' target='_blank'>GitHub 🦝</a></div>", unsafe_allow_html=True)
