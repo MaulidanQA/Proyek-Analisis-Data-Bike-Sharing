@@ -5,8 +5,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.figure_factory as ff
 
-day_df = pd.read_csv("data/day.csv")
-hour_df = pd.read_csv("data/hour.csv")
+day_df = pd.read_csv("Data/day.csv")
+hour_df = pd.read_csv("Data/hour.csv")
 
 st.write("""
 <style>
