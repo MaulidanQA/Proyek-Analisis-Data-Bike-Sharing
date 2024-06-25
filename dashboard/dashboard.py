@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
 
 # Load datasets
 day_df = pd.read_csv("Data/day.csv")
@@ -27,8 +26,7 @@ st.sidebar.title("Bike Sharing")
 st.sidebar.image('dashboard/sidebarlogo.png')
 
 # Dataset selection
-selected_dataset = st.sidebar.selectbox("Show Dataset",
-                                        ["Hide Dataset", "Day Dataset", "Hour Dataset", "Summary Statistics"])
+selected_dataset = st.sidebar.selectbox("Show Dataset", ["Hide Dataset", "Day Dataset", "Hour Dataset", "Summary Statistics"])
 if selected_dataset == "Day Dataset":
     st.subheader("Raw Data (Day Dataset)")
     st.write(day_df)
@@ -81,7 +79,7 @@ if len(selected_weather) > 2:
     st.pyplot(fig)
 
 # Toggle for comparison
-on = st.sidebar.toggle('Comparison Based On Weather')
+on = st.sidebar.checkbox('Comparison Based On Weather')
 if on:
     st.markdown("### Comparison Total Bike Rentals by Weather Condition")
     cnt_rename = day_df.rename(columns={'cnt': 'Total Bike Rentals'})
@@ -98,26 +96,37 @@ if on:
 st.sidebar.markdown("## Hourly Data Visualization")
 if st.sidebar.checkbox("Show Hourly Data Visualization"):
     st.subheader("Visualization of Bike Rentals per Hour")
-
-    # Group by hour and calculate the average number of rentals
-    hourly_rentals = hour_df.groupby('hr')['cnt'].mean().reset_index()
-
+    
+    # Group by hour and calculate the total number of rentals
+    rentals_by_hour = hour_df.groupby('hr')['cnt'].sum()
+    
+    # Find the hour with the highest number of rentals
+    jam_tertinggi = rentals_by_hour.idxmax()
+    jam_tertinggi_formatted = str(jam_tertinggi) + ':00'
+    jumlah_tertinggi = rentals_by_hour.max()
+    
+    # Plot the data
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.lineplot(data=hourly_rentals, x='hr', y='cnt', ax=ax)
-    ax.set_xlabel('Hour of the Day')
-    ax.set_ylabel('Average Number of Bike Rentals')
-    ax.set_title('Average Number of Bike Rentals per Hour')
+    ax.bar(rentals_by_hour.index, rentals_by_hour.values, color='skyblue')
+    ax.set_xlabel('Hour')
+    ax.set_ylabel('Total Bike Rentals')
+    ax.set_title('Total Bike Rental per Hour')
+    ax.set_xticks(range(24))
+    ax.set_xticklabels([str(hour) + ':00' for hour in range(24)], rotation=45)
+    ax.grid(True)
+    
     st.pyplot(fig)
-
+    
+    # Display the hour with the highest number of rentals
+    st.write(f"Jam dengan jumlah peminjaman sepeda tertinggi: {jam_tertinggi_formatted}")
+    st.write(f"Jumlah peminjaman sepeda pada jam tersebut: {jumlah_tertinggi} sepeda")
 
 # Functions for data download
 def convert_daydf(day_df):
     return day_df.to_csv().encode('utf-8')
 
-
 def convert_hourdf(hour_df):
     return hour_df.to_csv().encode('utf-8')
-
 
 # Data download buttons
 st.sidebar.markdown("### Download Data")
@@ -140,8 +149,5 @@ st.sidebar.download_button(
 )
 
 # Footer
-st.sidebar.caption("<div style='text-align: center; margin-top: 50px;'>Maulidan Qowiyyul Amin\nDICODING</div>",
-                   unsafe_allow_html=True)
-st.sidebar.markdown(
-    "<div style='text-align: center;'><a href='https://github.com/MaulidanQA' target='_blank'>GitHub 🦝</a></div>",
-    unsafe_allow_html=True)
+st.sidebar.caption("<div style='text-align: center; margin-top: 50px;'>Maulidan Qowiyyul Amin\nDICODING</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='text-align: center;'><a href='https://github.com/MaulidanQA' target='_blank'>GitHub 🦝</a></div>", unsafe_allow_html=True)
